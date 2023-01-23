@@ -9,13 +9,24 @@ import matplotlib.pyplot as plt
 from scipy.spatial.distance import cdist
 
 def plotDecBoundaries(training, label_train, sample_mean, fsize=(6,4)):
+    
+    '''
+    Plot the decision boundaries and data points for minimum distance to
+    class mean classifier
+    
+    training: traning data, N x d matrix:
+        N: number of data points
+        d: number of features
+        if d > 2 then the first and second features will be plotted (1st and 2nd column (0 and 1 index))
+    label_train: class lables correspond to training data, N x 1 array:
+        N: number of data points
+        the labels should start numbering from 1 (not 0)
+        code works for up to 3 classes
+    sample_mean: mean vector for each class, C x d matrix:
+        C: number of classes
+        each row of the sample_mean matrix is the coordinate of each sample mean
+    '''
 
-    #Plot the decision boundaries and data points for minimum distance to
-    #class mean classifier
-    #
-    # training: traning data
-    # label_train: class lables correspond to training data
-    # sample_mean: mean vector for each class
     #
     # Total number of classes
     nclass =  max(np.unique(label_train))
@@ -82,5 +93,3 @@ def plotDecBoundaries(training, label_train, sample_mean, fsize=(6,4)):
     plt.gca().add_artist(l1)
 
     plt.show()
-
-
