@@ -23,13 +23,13 @@ def plotDecBoundaries_2(training, label_train, sample_mean, fsize=(6,4),legend_o
     label_train: class lables correspond to training data, N x 1 array:
         N: number of data points
     sample_mean: mean vector for each class, C x d matrix:
-        C: number of classes (up to 10 classes the way the plot symbos are defined)
+        C: number of classes (up to 5 classes the way the plot symbos are defined)
         each row of the sample_mean matrix is the coordinate of each sample mean
-    legend_on: add the legend in the plot. Potentially slower for datasets with large number of clases and data points
-        or would occupy significant part of the plot if too many classes
+    legend_on: add the legend in the plot. potentially slower for datasets with large number of clases and data points
     '''
 
     #
+    label_train = label_train.astype(int)
     # Total number of classes
     nclass =  len(np.unique(label_train))
 
