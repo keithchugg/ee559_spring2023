@@ -1,7 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 
-def plot_multiclass_histograms(X_aug, W, y, fname, scale=1, class_names=None):
+def plot_multiclass_histograms(X_aug, W, y, fname, norm_W=False, scale=1, class_names=None):
     """
     Keith Chugg, USC, 2023.
 
@@ -9,7 +9,9 @@ def plot_multiclass_histograms(X_aug, W, y, fname, scale=1, class_names=None):
     W: shape: (D + 1, C).  The matrix of augmented weight-vectors.  W.T[m] is the weight vector for class m
     y: length N array with int values with correct classes.  Classes are indexed from 0 up.
     fname: a pdf of the histgrams will be saved to filename fname
+    norm_W: boolean.  If True, the w-vectors for each class are normalized.
     scale: use scale < 1 to make the figure smaller, >1 to make it bigger
+    class_names: pass a list of text, descriptive names for the classes.  
 
     This function takes in the weight vectors for a linear classifier and applied the "maximum value methd" -- i.e., 
     it computes the argmax_m g_m(x), where g_m(x) = w_m^T x to find the decision. For each class, it plots the historgrams 
@@ -18,6 +20,8 @@ def plot_multiclass_histograms(X_aug, W, y, fname, scale=1, class_names=None):
 
     Returns: the overall misclassification error percentage
     """
+    if norm_W:
+       W = W / np.linalg.norm(W, axis=0)
     y_soft = X_aug @ W
     N, C = y_soft.shape
     y_hard = np.argmax(y_soft, axis=1)
@@ -40,6 +44,9 @@ def plot_multiclass_histograms(X_aug, W, y, fname, scale=1, class_names=None):
             ax[c_true].legend()
             ax[c_true].grid(':')
         ax[c_true].text(0, 0.9 * peak, f'True: {class_names[c_true]}\nConditional Error Rate = {conditional_error_rate[c_true] : 0.2f}%')
-    ax[C-1].set_xlabel(r'discriminant function $g_m(x)$')
+    if norm_W:
+        ax[C-1].set_xlabel(r'nromalized discriminant function $g_m(x) / || {\bf w} ||$')
+    else:
+        ax[C-1].set_xlabel(r'discriminant function $g_m(x)$')
     plt.savefig(fname, bbox_inches='tight',)
     return error_percent
