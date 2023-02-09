@@ -145,7 +145,7 @@ def load_MNIST_data(data_path, fashion=False, quiet=False):
 
     x_test = test_set.data.numpy()
     y_test = test_set.targets.numpy()
-
+    
     N_train, H, W = x_train.shape
     N_test, H, W = x_test.shape
 
@@ -157,5 +157,5 @@ def load_MNIST_data(data_path, fashion=False, quiet=False):
         N_i_train = np.sum(y_train==i)
         N_i_test = np.sum(y_test==i)
         if not quiet:
-            print(f'Class {i}: has {N_i_train} images ({100 * N_i_train / N_train : .2f} %), {np.sum(y_train==i)} test images ({100 * N_i_test/ N_test : .2f} %) ')
+            print(f'Class {i}: has {N_i_train} train images ({100 * N_i_train / N_train : .2f} %), {N_i_test} test images ({100 * N_i_test/ N_test : .2f} %) ')
     return x_train, y_train, x_test, y_test
