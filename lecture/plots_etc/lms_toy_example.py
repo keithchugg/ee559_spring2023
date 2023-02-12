@@ -34,3 +34,12 @@ plt.grid(':')
 plt.legend()
 plt.show()
 plt.close()
+
+"""
+Students should explore:
+
+* what happens if some noise is added to y_n so that it is not a perfect fit?
+* what happens if y_n is generated using a linear model with more than D=2?
+* is the stability of the LMS dependent on the initial value of w_hat?
+
+"""
