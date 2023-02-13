@@ -45,7 +45,7 @@ ax[1].set_xlabel(r'$w_0$')
 ax[1].set_ylabel(r'$w_1$')
 ax[1].grid(':')
 ax[1].legend()
-plt.savefig(f'lms_toy_eta_{eta}.pdf', bbox_inches='tight')
+plt.savefig(f'plots/lms_toy_eta_{eta}.pdf', bbox_inches='tight')
 plt.show()
 plt.close()
 
