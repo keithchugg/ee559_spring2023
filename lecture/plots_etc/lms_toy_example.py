@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 N = 8
-eta = 1.2
-N_epochs = 2
+eta = 0.1
+N_epochs = 10
 
 w = np.asarray([-2, 4])
 x = np.random.choice([-1 , +1], 2 * N).reshape(N, 2)
