@@ -4,7 +4,7 @@ from utils import classification_error, classification_accuracy
 
 def main():
 
-    # Load data
+    # Load data file
     data = np.loadtxt("train.csv",delimiter=",", dtype=np.float64)
     train_data = data[:,:2]
     train_label = data[:,2]

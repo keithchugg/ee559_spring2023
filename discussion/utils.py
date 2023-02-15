@@ -1,5 +1,3 @@
-# utils.py
-
 import numpy as np
 
 def classification_error(gt, predicted):

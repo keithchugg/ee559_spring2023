@@ -1,5 +1,3 @@
-# ml_algorithms.py
-
 import numpy as np 
 
 class NearestMeansClassifier:
