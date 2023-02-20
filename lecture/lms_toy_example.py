@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 N = 8
 eta = 0.5
-N_epochs = 1
+N_epochs = 20
 
 w = np.asarray([-2, 4])
 x = np.random.choice([-1 , +1], 2 * N).reshape(N, 2)
@@ -31,7 +31,7 @@ ax[0].plot(iterations, w_hat_hist.T[0], color='g', linestyle = '--', marker='o',
 ax[0].plot(iterations, w_hat_hist.T[1], color='b', linestyle = '--', marker='o', label=r'$\hat{w}_1$')
 ax[0].axhline(w[0], c='g', )
 ax[0].axhline(w[1], c='b')
-ax[0].text(N * N_epochs / 2, np.mean(w), fr'$\eta = ${eta : 0.2}')
+ax[0].text(N * N_epochs / 2, np.mean(w), fr'$\eta = ${float(eta) : 0.2}')
 ax[0].set_xlabel('iteration')
 ax[0].set_ylabel('w coefficents and estimates')
 ax[0].grid(':')
