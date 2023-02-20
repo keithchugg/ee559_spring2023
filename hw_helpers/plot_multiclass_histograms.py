@@ -33,7 +33,7 @@ def plot_multiclass_histograms(X_aug, W, y, fname, norm_W=False, scale=1, class_
     if class_names is None:
         class_names = [f'Class {i}' for i in range(C)]
     for c_true in range(C):
-        y_soft_cs.append(X_aug[y_train == c_true] @ W)
+        y_soft_cs.append(X_aug[y == c_true] @ W)
         y_hard_c = np.argmax(y_soft_cs[c_true], axis=1)
         conditional_error_rate[c_true] = 100 * np.sum(y_hard_c != c_true) / len(y_hard_c)
     for c_true in range(C):
