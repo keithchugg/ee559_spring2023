@@ -1,7 +1,10 @@
 import numpy as np 
 import matplotlib.pyplot as plt
+from torchvision import datasets
 
-
+############################################################
+#### From nearest_means_classifier.ipynb
+############################################################
 def generate_colored_nongaussian_data(means, lambdas, thetas, Ns, distribution='normal', quiet_mode='true'):
     """
     means: shape (2, 2), means[0] is the 2 x 1 mean vector for class 1 data generation
@@ -63,7 +66,11 @@ def generate_colored_nongaussian_data(means, lambdas, thetas, Ns, distribution='
 
     return x, labels, sample_means
 
-def solve_plot_ls_nm_classifier(x, labels):
+############################################################
+#### From least_squares_binary_classifier.ipynb
+############################################################
+
+def solve_plot_ls_nm_classifier(x, labels, w_norm=False):
     ## LS classifier
     N = x.shape[0]
     X_tilde = np.ones((N, 3))   ## the feature vector is dimension 2, and this is the extended version   
@@ -80,7 +87,7 @@ def solve_plot_ls_nm_classifier(x, labels):
     w_nm[0] = 0.5 * (np.dot(mu2, mu2) - np.dot(mu1, mu1))
     w_nm[1:] = mu1 - mu2
 
-    plt.figure(figsize=(6, 6))
+    plt.figure(figsize=(8, 8))
     LIMIT = np.max(x)
     x_plot = np.arange(-1 * LIMIT, LIMIT, 0.01)
     plt.scatter(x_1.T[0], x_1.T[1], fc=(0, 0, 1, 0.5), label='class 1')
@@ -100,6 +107,12 @@ def solve_plot_ls_nm_classifier(x, labels):
     for i, w in enumerate([w_ls, w_nm]):
         g1 = x_1 @ w[1:] + w[0] ## discriminate function values for all data in class 1
         g2 = x_2 @ w[1:] + w[0] ## discriminate function values for all data in class 2
+        if w_norm:
+            g1 /= np.linalg.norm(w[1:] )
+            g2 /= np.linalg.norm(w[1:] )
+            xlabel = r'discriminant function $g({\bf x}) / \| {\bf w} \|$'
+        else:
+            xlabel = r'discriminant function $g({\bf x})$'
         h1 = ax[i].hist(g1, bins = 100, fc=(0, 0, 1, 0.5), label='class 1')
         h2 = ax[i].hist(g2, bins = 100, fc=(1, 0, 0, 0.5), label='class 2')
         N1_errors = np.sum(g1 < 0)  ## error condition:  g > 0 <==> x in Gamma_1
@@ -109,13 +122,44 @@ def solve_plot_ls_nm_classifier(x, labels):
         
         ax[i].grid(':')
         ax[i].legend()
-        ax[i].set_xlabel('discriminant function g(x)')
+        ax[i].set_xlabel(xlabel)
         ax[i].set_ylabel('histogram count')
         ax[i].set_title(titles[i])
         peak = np.maximum(np.max(h1[0]), np.max(h2[0]))
         ax[i].text(0, 0.7 * peak, f'Error rate = {error_rate : 0.3f}% ({N1_errors + N2_errors}/{N})')
     
+        # print(f'Error rate = {error_rate : 0.3f}%')
 
-    return w_ls, w_nm
+
     print(f'\nw vector for LS: {w_ls}')
     print(f'w vector for NM: {w_nm}\n')
+
+############################################################
+#### From mnist_binary_mse_nmc_linear_classifier.ipynb
+############################################################
+def load_MNIST_data(data_path, fashion=False, quiet=False):
+    if not fashion:
+        train_set = datasets.MNIST(data_path, download=True, train=True)
+        test_set = datasets.MNIST(data_path, download=True, train=False)
+    else:
+        train_set = datasets.FashionMNIST(data_path, download=True, train=True)
+        test_set = datasets.FashionMNIST(data_path, download=True, train=False)      
+    x_train = train_set.data.numpy()
+    y_train = train_set.targets.numpy()
+
+    x_test = test_set.data.numpy()
+    y_test = test_set.targets.numpy()
+    
+    N_train, H, W = x_train.shape
+    N_test, H, W = x_test.shape
+
+    if not quiet:
+        print(f'The data are {H} x {W} grayscale images.')
+        print(f'N_train = {N_train}')
+        print(f'N_test = {N_test}')
+    for i in set(y_train):
+        N_i_train = np.sum(y_train==i)
+        N_i_test = np.sum(y_test==i)
+        if not quiet:
+            print(f'Class {i}: has {N_i_train} train images ({100 * N_i_train / N_train : .2f} %), {N_i_test} test images ({100 * N_i_test/ N_test : .2f} %) ')
+    return x_train, y_train, x_test, y_test
