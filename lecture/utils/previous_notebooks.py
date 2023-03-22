@@ -1,6 +1,8 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 from torchvision import datasets
+import cv2
+from imutils import build_montages
 
 ############################################################
 #### From nearest_means_classifier.ipynb
@@ -163,3 +165,31 @@ def load_MNIST_data(data_path, fashion=False, quiet=False):
         if not quiet:
             print(f'Class {i}: has {N_i_train} train images ({100 * N_i_train / N_train : .2f} %), {N_i_test} test images ({100 * N_i_test/ N_test : .2f} %) ')
     return x_train, y_train, x_test, y_test
+
+def create_montage(x_data, y_labels, label_names, fname, true_labels=None, N=4):
+    # initialize our list of output images
+    images = []
+
+    # randomly select a few images
+    for i in np.random.choice(np.arange(0, len(y_labels)), size=(N * N,)):
+        sample_image = x_data[i]
+        sample_label = y_labels[i]
+        sample_label_name = label_names[sample_label]
+        # image = (sample_image * 255).astype("uint8")
+        # initialize the text label color as green (correct)
+        color = (0, 255, 0)
+        if true_labels is not None and sample_label != true_labels[i]:
+            # color red if an error has occcurred (when y_labels are predictions)
+            color = (0, 0, 255)
+        # merge the channels into one image and resize the image from
+        # 28x28 to 96x96 so we can better see it and then draw the
+        # predicted label on the image
+        image = cv2.merge([sample_image] * 3)
+        image = cv2.resize(image, (96, 96), interpolation=cv2.INTER_LINEAR)
+        cv2.putText(image, sample_label_name, (5, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
+        # add the image to our list of output images
+        images.append(image)
+
+        # construct the montage for the images
+        montage = build_montages(images, (96, 96), (N, N))[0]
+        cv2.imwrite(fname, montage)
