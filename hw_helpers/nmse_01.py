@@ -10,4 +10,4 @@ def normalized_mse_01(f, f_hat, x_grid, G=10000):
     sq_error = (f_fine - f_hat_fine) ** 2           # compute squared error
     mse = np.mean(sq_error)                         # this is a scalar multiple of the integral (approximately)
     ref = np.mean(f_fine ** 2)                      # Energy in target; off by same scalar as mse
-    return mse / ref
+    return mse / ref                                # scalar values cancel 
